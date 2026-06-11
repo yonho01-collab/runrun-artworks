@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="陈巫润儿童绘画作品集，北京市朝阳外国语学校三七班。收录绘画、设计图、校园标识、参观记录与民间美术主题作品。"
+    />
+    <title>陈巫润儿童绘画作品集</title>
+
+    <!-- Open Graph / 社交分享 -->
+    <meta property="og:title" content="陈巫润儿童绘画作品集" />
+    <meta
+      property="og:description"
+      content="来自北京市朝阳外国语学校三七班的童心画廊，收录绘画、设计与观察记录。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+
+    <!-- Google Fonts: Fredoka (headings) + Nunito (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232f8f5b'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='34' font-family='Arial,sans-serif' fill='%23f6fbf4'%3E润%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- 键盘用户跳过导航 -->
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+    <header class="site-header">
+      <a class="brand" href="#main-content" aria-label="回到首页">
+        <span class="brand-mark">润</span>
+        <span>陈巫润作品集</span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="#works" data-section="works">作品</a>
+        <a href="#author" data-section="author">作者</a>
+        <a href="#curation" data-section="curation">导览</a>
+      </nav>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="hero-kicker">CHEN WURUN ART PORTFOLIO</p>
+          <h1 id="hero-title">陈巫润的童心画廊</h1>
+          <p class="hero-lead">
+            来自北京市朝阳外国语学校三七班的绘画、设计与观察记录。
+          </p>
+          <div class="hero-actions" aria-label="页面快捷入口">
+            <a class="button primary" href="#works">看作品</a>
+            <a class="button secondary" href="#author">作者档案</a>
+          </div>
+        </div>
+        <figure class="hero-art">
+          <img
+            src="绘画版-总览.jpg"
+            alt="陈巫润绘画作品总览，包含未来电风扇、参天大树、游乐场、鱼、建筑与校园标识等作品"
+            width="820"
+            height="1320"
+          />
+          <figcaption>
+            一组从校园、城市、自然和想象中长出来的作品。
+          </figcaption>
+        </figure>
+      </section>
+
+      <section id="author" class="author-panel" aria-labelledby="author-title">
+        <div>
+          <h2 id="author-title">作者档案</h2>
+          <p>
+            陈巫润的作品里有很多“认真看见”的痕迹：看见校园里的通道，看见城市里的高楼，看见树枝的生长，也看见一个电风扇可以变成带喷雾、带太阳能板的未来装置。
+          </p>
+        </div>
+        <dl class="author-facts">
+          <div>
+            <dt>作者</dt>
+            <dd>陈巫润</dd>
+          </div>
+          <div>
+            <dt>学校</dt>
+            <dd>北京市朝阳外国语学校</dd>
+          </div>
+          <div>
+            <dt>班级</dt>
+            <dd>三七班</dd>
+          </div>
+          <div>
+            <dt>收录</dt>
+            <dd>10 幅作品</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="works" class="works-section" aria-labelledby="works-title">
+        <div class="section-heading">
+          <h2 id="works-title">作品展厅</h2>
+          <p>
+            每张作品都保留原始照片质感，并配有面向观众的文字说明。打开作品，可以看到更完整的画面解读。
+          </p>
+        </div>
+        <div class="filters" aria-label="作品分类筛选">
+          <button class="filter-button active" type="button" data-filter="all">全部</button>
+          <button class="filter-button" type="button" data-filter="design">设计想象</button>
+          <button class="filter-button" type="button" data-filter="nature">自然观察</button>
+          <button class="filter-button" type="button" data-filter="city">城市建筑</button>
+          <button class="filter-button" type="button" data-filter="school">校园生活</button>
+          <button class="filter-button" type="button" data-filter="culture">传统文化</button>
+        </div>
+        <div id="gallery" class="gallery" aria-live="polite"></div>
+        <p id="empty-state" class="empty-state" hidden>这一类暂时没有作品。</p>
+      </section>
+
+      <section id="curation" class="curation" aria-labelledby="curation-title">
+        <div class="curation-main">
+          <h2 id="curation-title">导览手记</h2>
+          <p>
+            这组作品最可贵的地方，是它们没有只停留在“画得像”。陈巫润会把看到的事物拆开：形状、功能、方向、结构、故事和情绪，都被放进画面里。
+          </p>
+        </div>
+        <div class="curation-notes">
+          <article>
+            <h3>会观察</h3>
+            <p>
+              从树干纹理到高楼线条，从游乐场设施到荣宝斋调研，作品里有持续观看后的整理。
+            </p>
+          </article>
+          <article>
+            <h3>会设计</h3>
+            <p>
+              未来电风扇和放学通道指示牌显示出清晰的功能意识，画面像儿童版产品方案。
+            </p>
+          </article>
+          <article>
+            <h3>会讲故事</h3>
+            <p>
+              云纹、鱼群、过山车、奔跑的小人，让静止的纸面有了方向感和速度感。
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>陈巫润儿童绘画作品集</p>
+      <p>北京市朝阳外国语学校三七班</p>
+    </footer>
+
+    <div class="modal" id="art-modal" aria-hidden="true">
+      <div class="modal-backdrop" data-close></div>
+      <section
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        tabindex="-1"
+      >
+        <button class="modal-close" type="button" data-close aria-label="关闭作品详情">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="modal-media">
+          <img id="modal-image" src="绘画版-总览.jpg" alt="作品详情图像" />
+        </div>
+        <div class="modal-copy">
+          <p id="modal-category" class="modal-category"></p>
+          <h2 id="modal-title"></h2>
+          <p id="modal-summary" class="modal-summary"></p>
+          <div class="detail-block">
+            <h3>作品说明</h3>
+            <p id="modal-description"></p>
+          </div>
+          <div class="detail-block">
+            <h3>画面解说</h3>
+            <p id="modal-interpretation"></p>
+          </div>
+          <div class="detail-block">
+            <h3>创作亮点</h3>
+            <p id="modal-highlight"></p>
+          </div>
+          <div class="detail-block">
+            <h3>给观众的小问题</h3>
+            <p id="modal-question"></p>
+          </div>
+          <div class="modal-actions">
+            <button class="button secondary" type="button" id="prev-art">上一幅</button>
+            <button class="button primary" type="button" id="next-art">下一幅</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

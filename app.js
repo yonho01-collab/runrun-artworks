@@ -11,7 +11,7 @@ const artworks = [
     description:
       "这张总览图把设计图、线描、建筑、游乐场、校园标识、参观记录和农民画主题放在同一个页面里。它不是单幅创作，而像一次迷你展览的入口，让观众先看到作品之间的关系。",
     interpretation:
-      "从总览可以看出，陈小润的兴趣不只在一种画法里。他会画想象中的工具，也会画真实校园和城市；会用黑白线条处理树，也会用明亮色块表现鱼和游乐场。",
+      "从总览可以看出，陈小润的兴趣不只在一种画法里。小润会画想象中的工具，也会画真实校园和城市；会用黑白线条处理树，也会用明亮色块表现鱼和游乐场。",
     highlight:
       "总览最适合作为作品集封面，因为它把“观察世界”和“重新发明世界”这两种能力同时展示出来。",
     question:
@@ -181,41 +181,59 @@ const artworks = [
   },
 ];
 
-/* ---- DOM Refs ---- */
+/* ---- DOM ---- */
 
-const gallery = document.querySelector("#gallery");
-const emptyState = document.querySelector("#empty-state");
-const filterButtons = Array.from(document.querySelectorAll(".filter-button"));
-const navLinks = Array.from(document.querySelectorAll(".site-nav a[data-section]"));
-const modal = document.querySelector("#art-modal");
-const modalCard = modal.querySelector(".modal-card");
-const modalImage = document.querySelector("#modal-image");
-const modalCategory = document.querySelector("#modal-category");
-const modalTitle = document.querySelector("#modal-title");
-const modalSummary = document.querySelector("#modal-summary");
-const modalDescription = document.querySelector("#modal-description");
-const modalInterpretation = document.querySelector("#modal-interpretation");
-const modalHighlight = document.querySelector("#modal-highlight");
-const modalQuestion = document.querySelector("#modal-question");
-const prevButton = document.querySelector("#prev-art");
-const nextButton = document.querySelector("#next-art");
-const mainContent = document.querySelector("#main-content");
+const dom = {
+  gallery: document.querySelector("#gallery"),
+  emptyState: document.querySelector("#empty-state"),
+  filterButtons: Array.from(document.querySelectorAll(".filter-button")),
+  navLinks: Array.from(document.querySelectorAll(".site-nav a[data-section]")),
+  modal: document.querySelector("#art-modal"),
+  modalImage: document.querySelector("#modal-image"),
+  modalCategory: document.querySelector("#modal-category"),
+  modalCount: document.querySelector("#modal-count"),
+  modalTitle: document.querySelector("#modal-title"),
+  modalSummary: document.querySelector("#modal-summary"),
+  modalDescription: document.querySelector("#modal-description"),
+  modalInterpretation: document.querySelector("#modal-interpretation"),
+  modalHighlight: document.querySelector("#modal-highlight"),
+  modalQuestion: document.querySelector("#modal-question"),
+  modalCopy: document.querySelector(".modal-copy"),
+  prevButton: document.querySelector("#prev-art"),
+  nextButton: document.querySelector("#next-art"),
+  mainContent: document.querySelector("#main-content"),
+  skipLink: document.querySelector(".skip-link"),
+};
 
-let activeFilter = "all";
-let visibleArtworks = [...artworks];
-let currentIndex = 0;
-let lastFocus = null;
+dom.modalCard = dom.modal.querySelector(".modal-card");
 
-/* ---- Intersection Observer: Scroll Spy ---- */
+const state = {
+  activeFilter: "all",
+  visibleArtworks: [...artworks],
+  currentIndex: 0,
+  lastFocus: null,
+};
 
-const sectionIds = navLinks.map(function (link) {
-  return link.getAttribute("data-section");
-});
+function createElement(tagName, className, text) {
+  var element = document.createElement(tagName);
+  if (className) element.className = className;
+  if (typeof text === "string") element.textContent = text;
+  return element;
+}
+
+function getVisibleArtworks() {
+  if (state.activeFilter === "all") return [...artworks];
+  return artworks.filter(function (artwork) {
+    return artwork.filter === state.activeFilter;
+  });
+}
+
+/* ---- Navigation ---- */
 
 function updateActiveNav(activeId) {
-  navLinks.forEach(function (link) {
-    var section = link.getAttribute("data-section");
-    if (section === activeId) {
+  dom.navLinks.forEach(function (link) {
+    var isActive = link.getAttribute("data-section") === activeId;
+    if (isActive) {
       link.setAttribute("aria-current", "page");
     } else {
       link.removeAttribute("aria-current");
@@ -223,204 +241,248 @@ function updateActiveNav(activeId) {
   });
 }
 
-if ("IntersectionObserver" in window) {
-  var sectionElements = sectionIds
-    .map(function (id) { return document.getElementById(id); })
+function setupScrollSpy() {
+  if (!("IntersectionObserver" in window)) {
+    updateActiveNav("works");
+    return;
+  }
+
+  var sectionElements = dom.navLinks
+    .map(function (link) { return document.getElementById(link.getAttribute("data-section")); })
     .filter(Boolean);
 
   var navObserver = new IntersectionObserver(
     function (entries) {
       entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          updateActiveNav(entry.target.id);
-        }
+        if (entry.isIntersecting) updateActiveNav(entry.target.id);
       });
     },
-    { rootMargin: "-30% 0px -65% 0px" }
+    { rootMargin: "-28% 0px -64% 0px" }
   );
 
-  sectionElements.forEach(function (el) { navObserver.observe(el); });
-}
-
-/* ---- Skip Link: 焦点管理 ---- */
-
-var skipLink = document.querySelector(".skip-link");
-if (skipLink) {
-  skipLink.addEventListener("click", function () {
-    mainContent.setAttribute("tabindex", "-1");
-    mainContent.focus({ preventScroll: true });
-  });
-
-  mainContent.addEventListener("blur", function () {
-    mainContent.removeAttribute("tabindex");
+  sectionElements.forEach(function (element) {
+    navObserver.observe(element);
   });
 }
 
-/* ---- Render Gallery ---- */
+function setupSkipLink() {
+  if (!dom.skipLink || !dom.mainContent) return;
+
+  dom.skipLink.addEventListener("click", function () {
+    dom.mainContent.setAttribute("tabindex", "-1");
+    dom.mainContent.focus({ preventScroll: true });
+  });
+
+  dom.mainContent.addEventListener("blur", function () {
+    dom.mainContent.removeAttribute("tabindex");
+  });
+}
+
+/* ---- Gallery ---- */
+
+function markImageLoaded(image, media) {
+  if (image.complete && image.naturalWidth > 0) {
+    media.classList.add("image-loaded");
+  }
+}
+
+function createArtworkCard(artwork, index) {
+  var card = createElement("button", ["art-card", artwork.layout, artwork.orientation].filter(Boolean).join(" "));
+  card.type = "button";
+  card.dataset.index = String(index);
+  card.style.setProperty("--card-order", String(index));
+  card.setAttribute("aria-label", "查看《" + artwork.title + "》作品解说");
+
+  var media = createElement("span", "art-media");
+  var image = document.createElement("img");
+  image.src = artwork.image;
+  image.alt = artwork.summary;
+  image.loading = index < 2 ? "eager" : "lazy";
+  image.decoding = "async";
+
+  image.addEventListener("load", function () {
+    media.classList.add("image-loaded");
+  }, { once: true });
+
+  image.addEventListener("error", function () {
+    media.textContent = "图片暂时无法显示";
+    media.classList.add("image-error");
+  }, { once: true });
+
+  markImageLoaded(image, media);
+
+  var copy = createElement("span", "art-copy");
+  var metaRow = createElement("span", "art-meta-row");
+  metaRow.append(
+    createElement("span", "art-number", String(index + 1).padStart(2, "0")),
+    createElement("span", "art-meta", artwork.category)
+  );
+
+  copy.append(
+    metaRow,
+    createElement("h3", "", artwork.title),
+    createElement("p", "", artwork.summary),
+    createElement("span", "art-cta", "查看解说")
+  );
+
+  media.append(image);
+  card.append(media, copy);
+  card.addEventListener("click", function () { openModal(index); });
+  return card;
+}
 
 function renderGallery() {
-  visibleArtworks = artworks.filter(function (artwork) {
-    return activeFilter === "all" || artwork.filter === activeFilter;
+  state.visibleArtworks = getVisibleArtworks();
+  dom.gallery.setAttribute("aria-busy", "true");
+  dom.emptyState.hidden = state.visibleArtworks.length > 0;
+
+  var fragment = document.createDocumentFragment();
+  state.visibleArtworks.forEach(function (artwork, index) {
+    fragment.append(createArtworkCard(artwork, index));
   });
 
-  gallery.innerHTML = "";
-  emptyState.hidden = visibleArtworks.length > 0;
-
-  visibleArtworks.forEach(function (artwork, index) {
-    var card = document.createElement("button");
-    card.className = ("art-card " + artwork.layout + " " + artwork.orientation).trim();
-    card.type = "button";
-    card.dataset.index = String(index);
-    card.setAttribute("aria-label", "查看《" + artwork.title + "》作品解说");
-
-    var media = document.createElement("span");
-    media.className = "art-media";
-
-    var img = document.createElement("img");
-    img.src = artwork.image;
-    img.alt = artwork.summary;
-    img.loading = index < 2 ? "eager" : "lazy";
-    img.decoding = "async";
-
-    /* 图片加载状态 */
-    img.addEventListener("load", function () {
-      media.classList.add("image-loaded");
-    });
-    img.addEventListener("error", function () {
-      media.textContent = "图片暂时无法显示";
-      media.classList.add("image-error");
-    });
-
-    var copy = document.createElement("span");
-    copy.className = "art-copy";
-    copy.innerHTML =
-      '<span class="art-meta">' + artwork.category + '</span>' +
-      '<h3>' + artwork.title + '</h3>' +
-      '<p>' + artwork.summary + '</p>' +
-      '<span class="art-cta">查看解说</span>';
-
-    media.append(img);
-    card.append(media, copy);
-    card.addEventListener("click", function () { openModal(index); });
-    gallery.append(card);
-  });
+  dom.gallery.replaceChildren(fragment);
+  dom.gallery.setAttribute("aria-busy", "false");
 }
 
-/* ---- Filter Logic ---- */
-
 function setFilter(filter) {
-  activeFilter = filter;
-  filterButtons.forEach(function (button) {
+  state.activeFilter = filter;
+
+  dom.filterButtons.forEach(function (button) {
     var isActive = button.dataset.filter === filter;
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
+
   renderGallery();
 }
 
-/* ---- Modal Logic ---- */
+/* ---- Modal ---- */
 
 function getFocusableElements() {
-  return modalCard.querySelectorAll(
-    'button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-  );
+  return Array.from(dom.modalCard.querySelectorAll(
+    'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+  ));
 }
 
 function trapFocus(event) {
   if (event.key !== "Tab") return;
+
   var focusable = getFocusableElements();
   if (!focusable.length) return;
+
   var first = focusable[0];
   var last = focusable[focusable.length - 1];
 
-  if (event.shiftKey) {
-    if (document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    }
-  } else {
-    if (document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  }
+
+  if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
   }
 }
 
 function openModal(index) {
-  currentIndex = index;
-  lastFocus = document.activeElement;
+  state.currentIndex = index;
+  state.lastFocus = document.activeElement;
   updateModal();
-  modal.classList.add("is-open");
-  modal.setAttribute("aria-hidden", "false");
+
+  dom.modal.classList.add("is-open");
+  dom.modal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
 
-  /* 焦点移到 modal，稍后移到关闭按钮避免动画期间焦点偏移 */
   requestAnimationFrame(function () {
-    var closeBtn = modalCard.querySelector(".modal-close");
-    if (closeBtn) closeBtn.focus();
+    var closeButton = dom.modalCard.querySelector(".modal-close");
+    if (closeButton) closeButton.focus();
   });
 }
 
 function closeModal() {
-  modal.classList.remove("is-open");
-  modal.setAttribute("aria-hidden", "true");
+  dom.modal.classList.remove("is-open");
+  dom.modal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
-  if (lastFocus && typeof lastFocus.focus === "function") {
-    lastFocus.focus({ preventScroll: true });
+
+  if (state.lastFocus && typeof state.lastFocus.focus === "function") {
+    state.lastFocus.focus({ preventScroll: true });
   }
 }
 
 function updateModal() {
-  var artwork = visibleArtworks[currentIndex];
-  modalImage.src = artwork.image;
-  modalImage.alt = artwork.summary;
-  modalCategory.textContent = artwork.category;
-  modalTitle.textContent = artwork.title;
-  modalSummary.textContent = artwork.summary;
-  modalDescription.textContent = artwork.description;
-  modalInterpretation.textContent = artwork.interpretation;
-  modalHighlight.textContent = artwork.highlight;
-  modalQuestion.textContent = artwork.question;
+  var artwork = state.visibleArtworks[state.currentIndex];
+  if (!artwork) return;
+
+  dom.modalImage.src = artwork.image;
+  dom.modalImage.alt = artwork.summary;
+  dom.modalCategory.textContent = artwork.category;
+  dom.modalCount.textContent =
+    String(state.currentIndex + 1).padStart(2, "0") +
+    " / " +
+    String(state.visibleArtworks.length).padStart(2, "0");
+  dom.modalTitle.textContent = artwork.title;
+  dom.modalSummary.textContent = artwork.summary;
+  dom.modalDescription.textContent = artwork.description;
+  dom.modalInterpretation.textContent = artwork.interpretation;
+  dom.modalHighlight.textContent = artwork.highlight;
+  dom.modalQuestion.textContent = artwork.question;
+  dom.prevButton.setAttribute("aria-label", "查看上一幅作品");
+  dom.nextButton.setAttribute("aria-label", "查看下一幅作品");
+
+  if (dom.modalCopy) dom.modalCopy.scrollTop = 0;
 }
 
 function moveModal(direction) {
-  if (!visibleArtworks.length) return;
-  currentIndex = (currentIndex + direction + visibleArtworks.length) % visibleArtworks.length;
+  if (!state.visibleArtworks.length) return;
+
+  state.currentIndex =
+    (state.currentIndex + direction + state.visibleArtworks.length) %
+    state.visibleArtworks.length;
   updateModal();
 }
 
-/* ---- Event Bindings ---- */
+/* ---- Events ---- */
 
-filterButtons.forEach(function (button) {
-  button.addEventListener("click", function () { setFilter(button.dataset.filter); });
-});
+function setupEvents() {
+  dom.filterButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      setFilter(button.dataset.filter);
+    });
+  });
 
-modal.addEventListener("click", function (event) {
-  if (event.target.matches("[data-close]")) {
-    closeModal();
-  }
-});
+  dom.modal.addEventListener("click", function (event) {
+    if (event.target.matches("[data-close]")) closeModal();
+  });
 
-prevButton.addEventListener("click", function () { moveModal(-1); });
-nextButton.addEventListener("click", function () { moveModal(1); });
+  dom.prevButton.addEventListener("click", function () { moveModal(-1); });
+  dom.nextButton.addEventListener("click", function () { moveModal(1); });
 
-document.addEventListener("keydown", function (event) {
-  if (!modal.classList.contains("is-open")) return;
-  if (event.key === "Escape") {
-    event.preventDefault();
-    closeModal();
-  }
-  if (event.key === "ArrowLeft") {
-    event.preventDefault();
-    moveModal(-1);
-  }
-  if (event.key === "ArrowRight") {
-    event.preventDefault();
-    moveModal(1);
-  }
-  trapFocus(event);
-});
+  document.addEventListener("keydown", function (event) {
+    if (!dom.modal.classList.contains("is-open")) return;
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeModal();
+    }
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      moveModal(-1);
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      moveModal(1);
+    }
+
+    trapFocus(event);
+  });
+}
 
 /* ---- Init ---- */
 
+setupScrollSpy();
+setupSkipLink();
+setupEvents();
 setFilter("all");

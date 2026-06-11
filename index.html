@@ -7,6 +7,7 @@
       name="description"
       content="陈小润儿童绘画作品集，北京市朝阳外国语学校。收录绘画、设计图、校园标识、参观记录与民间美术主题作品。"
     />
+    <meta name="theme-color" content="#f8f3e8" />
     <title>陈小润儿童绘画作品集</title>
 
     <!-- Open Graph / 社交分享 -->
@@ -17,8 +18,9 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
+    <meta property="og:image" content="绘画版-鱼儿游啊游农民画.png" />
 
-    <!-- Google Fonts: Fredoka (headings) + Nunito (body) -->
+    <!-- Google Fonts: Fredoka (display) + Nunito (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -30,7 +32,7 @@
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232f8f5b'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='34' font-family='Arial,sans-serif' fill='%23f6fbf4'%3E润%3C/text%3E%3C/svg%3E"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260611g" />
   </head>
   <body>
     <!-- 键盘用户跳过导航 -->
@@ -51,31 +53,56 @@
     <main id="main-content" tabindex="-1">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="hero-kicker">CHEN XIAORUN ART PORTFOLIO</p>
+          <p class="hero-kicker">
+            <span>儿童绘画作品集</span>
+            <span>线上小展</span>
+          </p>
           <h1 id="hero-title">陈小润的童心画廊</h1>
           <p class="hero-lead">
-            用明亮色块和装饰纹样，画出一群在水里游动的鱼——欢迎来到她的想象世界。
+            这里收藏了小润画下的城市、校园、树、鱼和小发明。每一幅作品都像一张观察世界的手稿，也像一封寄给想象力的短笺。
           </p>
           <div class="hero-actions" aria-label="页面快捷入口">
             <a class="button primary" href="#works">看作品</a>
             <a class="button secondary" href="#author">作者档案</a>
           </div>
+          <dl class="hero-stats" aria-label="作品集信息">
+            <div>
+              <dt>作品</dt>
+              <dd>10 幅</dd>
+            </div>
+            <div>
+              <dt>主题</dt>
+              <dd>5 类</dd>
+            </div>
+            <div>
+              <dt>形式</dt>
+              <dd>绘画与设计</dd>
+            </div>
+          </dl>
         </div>
-        <figure class="hero-art">
-          <img
-            src="绘画版-鱼儿游啊游农民画.png"
-            alt="陈小润作品：鱼儿游啊游农民画——蓝色水面和粉色天空下，一群装饰着几何纹样的大鱼在水中游动"
-            width="1448"
-            height="1086"
-          />
-          <figcaption>
-            鱼儿游啊游 · 农民画 —— 像穿着节日衣服的鱼群，把水面变成了一场童话巡游。
-          </figcaption>
-        </figure>
+        <div class="hero-showcase" aria-label="精选作品预览">
+          <figure class="hero-art">
+            <img
+              src="绘画版-鱼儿游啊游农民画.png"
+              alt="陈小润作品：鱼儿游啊游农民画——蓝色水面和粉色天空下，一群装饰着几何纹样的大鱼在水中游动"
+              width="1448"
+              height="1086"
+            />
+            <figcaption>
+              鱼儿游啊游 · 农民画 —— 像穿着节日衣服的鱼群，把水面变成了一场童话巡游。
+            </figcaption>
+          </figure>
+          <div class="hero-rail">
+            <img src="绘画版-便携电扇转啊转未来电风扇设计图.png" alt="未来便携电风扇设计图作品缩略图" width="1086" height="1448" />
+            <img src="绘画版-参天大树.png" alt="参天大树作品缩略图" width="1086" height="1448" />
+            <img src="绘画版-欢游游乐场.png" alt="欢游游乐场作品缩略图" width="1448" height="1086" />
+          </div>
+        </div>
       </section>
 
       <section id="author" class="author-panel" aria-labelledby="author-title">
         <div>
+          <p class="section-kicker">artist note</p>
           <h2 id="author-title">作者档案</h2>
           <p>
             陈小润的作品里有很多“认真看见”的痕迹：看见校园里的通道，看见城市里的高楼，看见树枝的生长，也看见一个电风扇可以变成带喷雾、带太阳能板的未来装置。
@@ -99,6 +126,7 @@
 
       <section id="works" class="works-section" aria-labelledby="works-title">
         <div class="section-heading">
+          <p class="section-kicker">gallery index</p>
           <h2 id="works-title">作品展厅</h2>
           <p>
             每张作品都保留原始照片质感，并配有面向观众的文字说明。打开作品，可以看到更完整的画面解读。
@@ -118,6 +146,7 @@
 
       <section id="curation" class="curation" aria-labelledby="curation-title">
         <div class="curation-main">
+          <p class="section-kicker">curator memo</p>
           <h2 id="curation-title">导览手记</h2>
           <p>
             这组作品最可贵的地方，是它们没有只停留在“画得像”。陈小润会把看到的事物拆开：形状、功能、方向、结构、故事和情绪，都被放进画面里。
@@ -169,7 +198,10 @@
           <img id="modal-image" src="绘画版-总览.jpg" alt="作品详情图像" />
         </div>
         <div class="modal-copy">
-          <p id="modal-category" class="modal-category"></p>
+          <div class="modal-topline">
+            <p id="modal-category" class="modal-category"></p>
+            <p id="modal-count" class="modal-count"></p>
+          </div>
           <h2 id="modal-title"></h2>
           <p id="modal-summary" class="modal-summary"></p>
           <div class="detail-block">
@@ -196,6 +228,6 @@
       </section>
     </div>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=20260611g"></script>
   </body>
 </html>

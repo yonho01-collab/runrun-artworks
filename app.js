@@ -183,6 +183,20 @@ const artworks = [
 
 /* ---- DOM ---- */
 
+/* ---- Category Color Hints ---- */
+
+const categoryColors = {
+  all: "coral",
+  design: "sky",
+  nature: "mint",
+  city: "lilac",
+  school: "sunny",
+  culture: "lavender",
+  overview: "coral",
+};
+
+/* ---- DOM ---- */
+
 const dom = {
   gallery: document.querySelector("#gallery"),
   emptyState: document.querySelector("#empty-state"),
@@ -313,9 +327,15 @@ function createArtworkCard(artwork, index) {
 
   var copy = createElement("span", "art-copy");
   var metaRow = createElement("span", "art-meta-row");
+  var metaBadge = createElement("span", "art-meta", artwork.category);
+
+  /* Category color accent on badge */
+  var catColor = categoryColors[artwork.filter] || "coral";
+  metaBadge.style.setProperty("--badge-accent", "var(--" + catColor + ")");
+
   metaRow.append(
     createElement("span", "art-number", String(index + 1).padStart(2, "0")),
-    createElement("span", "art-meta", artwork.category)
+    metaBadge
   );
 
   copy.append(
@@ -336,13 +356,23 @@ function renderGallery() {
   dom.gallery.setAttribute("aria-busy", "true");
   dom.emptyState.hidden = state.visibleArtworks.length > 0;
 
+  /* Quick fade for smooth filtering */
+  dom.gallery.style.opacity = "0";
+  dom.gallery.style.transform = "translateY(8px)";
+
   var fragment = document.createDocumentFragment();
   state.visibleArtworks.forEach(function (artwork, index) {
     fragment.append(createArtworkCard(artwork, index));
   });
 
   dom.gallery.replaceChildren(fragment);
-  dom.gallery.setAttribute("aria-busy", "false");
+
+  requestAnimationFrame(function () {
+    dom.gallery.style.transition = "opacity 280ms cubic-bezier(0.34, 1.56, 0.64, 1), transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1)";
+    dom.gallery.style.opacity = "1";
+    dom.gallery.style.transform = "translateY(0)";
+    dom.gallery.setAttribute("aria-busy", "false");
+  });
 }
 
 function setFilter(filter) {
@@ -352,6 +382,14 @@ function setFilter(filter) {
     var isActive = button.dataset.filter === filter;
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
+
+    /* Apply category color accent */
+    var btnColor = categoryColors[button.dataset.filter] || "coral";
+    button.style.setProperty("--btn-accent", "var(--" + btnColor + ")");
+
+    if (isActive) {
+      button.style.setProperty("--btn-shadow-accent", "var(--" + btnColor + ")");
+    }
   });
 
   renderGallery();
